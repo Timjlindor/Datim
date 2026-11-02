@@ -1,0 +1,32 @@
+{
+  "name": "datim-connect",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "generate:client": ".venv/bin/python scripts/export_openapi.py && openapi-typescript docs/openapi.json -o packages/api-client/src/schema.d.ts",
+    "test:terminal": "node scripts/test-terminal.mjs",
+    "test:market": "node scripts/test-paper-market.mjs",
+    "test:money": "node scripts/test-money.mjs",
+    "test:api": "PYTHONPATH=services/api .venv/bin/pytest services/api/tests -q",
+    "test:postgres": ".venv/bin/python scripts/verify-postgres.py",
+    "test": "npm run test:money && npm run test:market && npm run test:terminal && npm run test:postgres",
+    "verify:ui": "node scripts/verify-ui.mjs",
+    "verify:hydration": "node scripts/measure-hydration.mjs"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "playwright-core": "1.64.0"
+  },
+  "overrides": {
+    "glob": "14.0.2",
+    "@expo/fingerprint": {
+      "minimatch": "11.0.1"
+    }
+  }
+}
